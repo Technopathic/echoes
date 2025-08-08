@@ -9,11 +9,15 @@ import { Response } from '@/components/ai-elements/response';
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
 import { useGetHistory } from "@/hooks/useConversation";
+import { useSearchParams } from "next/navigation";
 
 const Chat = () => {
   const [input, setInput] = useState('')
   const { messages, status } = useChat();
-  const { data } = useGetHistory()
+
+	const searchParams = useSearchParams()
+	const slug = searchParams.get('id');
+  const { data } = useGetHistory(slug)
 
   const storePrompt = () => {
     

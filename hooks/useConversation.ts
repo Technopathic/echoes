@@ -6,7 +6,7 @@ import { useUserStore } from './useStore'
 
 type GetHistoryResponse = types.DefaultResponse & { data?: types.History[] }
 
-export const useGetHistory = () => {
+export const useGetHistory = (slug: string | null) => {
     const response = async ([key, token]: [string, string | undefined]): Promise<GetHistoryResponse> => {
         const result = await fetch(`${API_ROUTE}/${key}`, {
             method: 'GET',
@@ -20,6 +20,6 @@ export const useGetHistory = () => {
     }
 
     const session = useUserStore(state => state.session);
-    const swrKey = session ? [`characters/read`, session?.access_token] : null;
+    const swrKey = session ? [`conversations/read?slug=${slug}`, session?.access_token] : null;
     return useSWR(swrKey, response);
 }

@@ -47,8 +47,8 @@ export async function GET(request: NextRequest) {
     const conversation = await showConversation(user.id, character.id);
     if (!conversation) {
         return NextResponse.json(
-            { type: 'ERROR', error: 'Conversation not found' },
-            { status: 404 }
+            { type: 'SUCCESS', data: [] },
+            { status: 200 }
         )
     }
 
