@@ -72,7 +72,7 @@ export type Database = {
           summary: string | null
           trust: number
           updated_at: string
-          userId: number
+          userId: string
         }
         Insert: {
           archived?: boolean
@@ -83,7 +83,7 @@ export type Database = {
           summary?: string | null
           trust?: number
           updated_at?: string
-          userId: number
+          userId: string
         }
         Update: {
           archived?: boolean
@@ -94,7 +94,7 @@ export type Database = {
           summary?: string | null
           trust?: number
           updated_at?: string
-          userId?: number
+          userId?: string
         }
         Relationships: [
           {
@@ -102,13 +102,6 @@ export type Database = {
             columns: ["characterId"]
             isOneToOne: false
             referencedRelation: "echoes_characters"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "echoes_userConversations_userId_fkey"
-            columns: ["userId"]
-            isOneToOne: false
-            referencedRelation: "echoes_users"
             referencedColumns: ["id"]
           },
         ]
@@ -144,33 +137,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      echoes_users: {
-        Row: {
-          archived: boolean
-          created_at: string
-          email: string
-          id: number
-          uid: string
-          username: string
-        }
-        Insert: {
-          archived?: boolean
-          created_at?: string
-          email: string
-          id?: number
-          uid: string
-          username: string
-        }
-        Update: {
-          archived?: boolean
-          created_at?: string
-          email?: string
-          id?: number
-          uid?: string
-          username?: string
-        }
-        Relationships: []
       }
       prompts: {
         Row: {

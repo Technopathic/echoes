@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { openai } from '@ai-sdk/openai';
 import { generateObject, generateText } from 'ai';
 import { z } from 'zod';
-import { showAuthUser, getAuth, showCharacter, showConversation, createConversation, createHistory, updateConversation, readHistory } from '../../db';
+import { getAuth, showCharacter, showConversation, createConversation, createHistory, updateConversation, readHistory } from '../../db';
 import { calculateMood, calculateTrust, moodToText, trustToText } from '../../helper';
 
 export async function POST(request: NextRequest) {
@@ -40,14 +40,6 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    const user = await showAuthUser(auth.id);
-    if(!user) {
-        return NextResponse.json(
-            { type: 'AUTH', error: 'User not found' },
-            { status: 404 }
-        )
-    }
-
     const character = await showCharacter(slug);
     if (!character) {
         return NextResponse.json(
@@ -56,9 +48,9 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    let conversation = await showConversation(user.id, character.id);
+    let conversation = await showConversation(auth.id, character.id);
     if (!conversation) {
-        conversation = await createConversation(user.id, character.id);
+        conversation = await createConversation(auth.id, character.id);
         if (!conversation) {
             return NextResponse.json(
                 { type: 'ERROR', error: 'Unable to start conversation' },

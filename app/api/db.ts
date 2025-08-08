@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from './database.types';
-import { User } from '@/types';
 
 const supabase = createClient<Database>(process.env.PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_KEY || '');
 
@@ -37,7 +36,7 @@ export const showCharacter = async (slug: string) => {
     return data
 }
 
-export const showConversation = async (userId: number, characterId: number) => {
+export const showConversation = async (userId: string, characterId: number) => {
     const { data } = await supabase.from('echoes_conversations').select(`
         id,
         userId,
@@ -59,7 +58,7 @@ export const showConversation = async (userId: number, characterId: number) => {
     return data
 }
 
-export const createConversation = async (userId: number, characterId: number) => {
+export const createConversation = async (userId: string, characterId: number) => {
     const { data, error } = await supabase.from('echoes_conversations').insert({
         userId,
         characterId
@@ -75,7 +74,7 @@ export const createConversation = async (userId: number, characterId: number) =>
     `)
     .single()
     console.log(error);
-    
+
     if (!data) {
         return null
     }
@@ -113,23 +112,6 @@ export const createHistory = async (conversationId: number, input: string, respo
         input,
         response
     })
-}
-
-export const showAuthUser = async (uid: string): Promise<User | null> => {
-    const { data } = await supabase.from('echoes_users').select(`
-        id, 
-        username, 
-        email
-    `)
-    .eq('uid', uid)
-    .eq('archived', false)
-    .single()
-
-    if (!data) {
-        return null
-    }
-
-    return data
 }
 
 export const authClient = (token: string) => {

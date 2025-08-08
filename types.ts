@@ -22,14 +22,7 @@ type ResponseType = 'EMAIL' | 'PASSWORD' | 'GENERAL' | 'SUCCESS'
 export interface AuthResponse {
     type: ResponseType
     error?: string
-    data?: User
     session?: Session
-}
-
-export interface User {
-    id: number
-    username: string
-    email: string
 }
 
 export interface Session {
@@ -41,10 +34,8 @@ export interface Session {
 }
 
 export interface UserState {
-    user: User | undefined
     session: Session | undefined
     _hasHydrated: boolean
-    setUser: (user: User | undefined) => void
     setSession: (sesson: Session | undefined) => void
     setHasHydrated: (isHydrated: boolean) => void
 }

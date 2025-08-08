@@ -10,7 +10,6 @@ import { useUserStore } from '@/hooks/useStore'
 import * as types from '@/types';
 
 const Login = () => {
-    const setUser = useUserStore(state => state.setUser);
     const setSession = useUserStore(state => state.setSession);
     const router = useRouter();
 
@@ -47,7 +46,6 @@ const Login = () => {
                 break;
 
             case 'SUCCESS': 
-                setUser(response.data);
                 setSession(response.session);
 
                 router.push('/');

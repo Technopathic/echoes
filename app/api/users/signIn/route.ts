@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { showAuthUser } from '../../db';
 import { Database } from '../../database.types'
 
 export async function POST(request: Request) {
@@ -46,16 +45,8 @@ export async function POST(request: Request) {
         );
     }
 
-    const user = await showAuthUser(data.user.id);
-    if (!user) {
-        return NextResponse.json(
-            { type: 'GENERAL', error: 'Sign in failed: User not found.' }, 
-            { status: 404 }
-        );
-    }
-
     return NextResponse.json(
-        { type: 'SUCCESS', data: user, session: data.session },
+        { type: 'SUCCESS', session: data.session },
         { status: 200 }
     )
 }
