@@ -69,6 +69,7 @@ export type Database = {
           created_at: string
           id: number
           mood: number
+          summary: string | null
           trust: number
           updated_at: string
           userId: number
@@ -79,6 +80,7 @@ export type Database = {
           created_at?: string
           id?: number
           mood?: number
+          summary?: string | null
           trust?: number
           updated_at?: string
           userId: number
@@ -89,6 +91,7 @@ export type Database = {
           created_at?: string
           id?: number
           mood?: number
+          summary?: string | null
           trust?: number
           updated_at?: string
           userId?: number
@@ -116,7 +119,6 @@ export type Database = {
           created_at: string
           id: number
           input: string
-          priority: number
           response: string | null
         }
         Insert: {
@@ -124,7 +126,6 @@ export type Database = {
           created_at?: string
           id?: number
           input: string
-          priority?: number
           response?: string | null
         }
         Update: {
@@ -132,7 +133,6 @@ export type Database = {
           created_at?: string
           id?: number
           input?: string
-          priority?: number
           response?: string | null
         }
         Relationships: [

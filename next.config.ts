@@ -2,7 +2,8 @@ import type { NextConfig } from "next";
 
 const env = {
   PUBLIC_SUPABASE_URL: process.env.PUBLIC_SUPABASE_URL || '',
-  SUPABASE_KEY: process.env.SUPABASE_KEY || ''
+  SUPABASE_KEY: process.env.SUPABASE_KEY || '',
+  OPENAI_MODEL: process.env.OPENAI_MODEL
 }
 
 const nextConfig: NextConfig = {

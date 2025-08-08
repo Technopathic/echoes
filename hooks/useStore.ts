@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import * as types from '@/types'
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
-import { Session, User } from '@/types';
+import { Session, User } from '@/types'
 
 export const useUserStore = create<types.UserState>()(persist(immer(set => ({
     user: undefined,
@@ -20,4 +20,8 @@ export const useUserStore = create<types.UserState>()(persist(immer(set => ({
             state.setHasHydrated(true);
         }
     },
-}));
+}))
+
+export const useHistoryStore = create<types.HistoryState>()(immer(set => ({
+    history: []
+})))

@@ -55,3 +55,12 @@ export interface Character {
     prompt: string
     slug: string
 }
+
+export interface History {
+    input: string
+    response: string
+}
+
+export interface HistoryState {
+    history: History[]
+}

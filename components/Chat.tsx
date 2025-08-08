@@ -8,10 +8,12 @@ import { Message, MessageContent } from "@/components/ai-elements/message";
 import { Response } from '@/components/ai-elements/response';
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
+import { useGetHistory } from "@/hooks/useConversation";
 
 const Chat = () => {
   const [input, setInput] = useState('')
   const { messages, status } = useChat();
+  const { data } = useGetHistory()
 
   const storePrompt = () => {
     return
