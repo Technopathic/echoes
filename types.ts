@@ -51,5 +51,5 @@ export interface Character {
     id: number
     name: string
     prompt: string
-    image: string
+    slug: string
 }

@@ -39,6 +39,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
     * id: number
     * name: string
     * prompt: string
-    * image: string
+    * slug: string
     * archived: boolean
 

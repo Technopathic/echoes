@@ -40,7 +40,6 @@ export type Database = {
           archived: boolean
           created_at: string
           id: number
-          image: string
           name: string
           prompt: string
           slug: string
@@ -49,7 +48,6 @@ export type Database = {
           archived?: boolean
           created_at?: string
           id?: number
-          image: string
           name: string
           prompt: string
           slug: string
@@ -58,7 +56,6 @@ export type Database = {
           archived?: boolean
           created_at?: string
           id?: number
-          image?: string
           name?: string
           prompt?: string
           slug?: string
@@ -73,6 +70,7 @@ export type Database = {
           id: number
           mood: number
           trust: number
+          updated_at: string
           userId: number
         }
         Insert: {
@@ -82,6 +80,7 @@ export type Database = {
           id?: number
           mood?: number
           trust?: number
+          updated_at?: string
           userId: number
         }
         Update: {
@@ -91,6 +90,7 @@ export type Database = {
           id?: number
           mood?: number
           trust?: number
+          updated_at?: string
           userId?: number
         }
         Relationships: [
@@ -151,6 +151,7 @@ export type Database = {
           created_at: string
           email: string
           id: number
+          uid: string
           username: string
         }
         Insert: {
@@ -158,6 +159,7 @@ export type Database = {
           created_at?: string
           email: string
           id?: number
+          uid: string
           username: string
         }
         Update: {
@@ -165,6 +167,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: number
+          uid?: string
           username?: string
         }
         Relationships: []

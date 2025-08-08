@@ -9,7 +9,9 @@ const Characters = () => {
     <section className="flex flex-col px-2 gap-4">
       {data?.data?.map((character, i) => (
         <article className="h-42 rounded-lg shadow-md relative overflow-hidden" key={i}>
-          <img src={character.image} className="w-full h-full object-cover"/>
+          <video className="w-full h-full object-cover">
+            <source src={`/characters/${character.slug}/cover.mp4`} />
+          </video>
           <section className="absolute bottom-0 w-full px-2 py-1 bg-neutral-900/85 backdrop-blur-sm">
             <p className="text-neutral-100">{character.name}</p>
           </section>
