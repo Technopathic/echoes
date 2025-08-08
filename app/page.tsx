@@ -1,7 +1,12 @@
+'use client'
+
 import Characters from "@/components/Characters"
 import Chat from "@/components/Chat"
+import { useUserStore } from "@/hooks/useStore";
+import Login from "@/components/Login";
 
 const Home = () => {
+  const session = useUserStore(state => state.session);
   return (
     <main className="flex w-full h-screen bg-neutral-900 gap-1">
       <section className="bg-neutral-900 h-screen w-72 flex flex-col">
@@ -15,7 +20,11 @@ const Home = () => {
       <section className="flex-grow pr-3 py-3 flex flex-col">
         <section></section>
         <section className="bg-neutral-800 h-full rounded-xl">
-          <Chat />
+          {session ? (
+            <Chat />
+          ): (
+            <Login />
+          )}
         </section>
       </section>
     </main>

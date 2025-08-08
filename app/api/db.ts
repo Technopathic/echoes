@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from './database.types';
+import { User } from '@/types';
 
 const supabase = createClient<Database>(process.env.PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_KEY || '');
 
@@ -35,4 +36,18 @@ export const showCharacter = async (slug: string) => {
     }
 
     return data
+}
+
+export const showAuthUser = async (uid: string): Promise<User | null> => {
+    const { data } = await supabase.from('echoes_users').select(`
+        id, 
+        username, 
+        email
+    `).eq('uid', uid).eq('archived', false).single();
+
+    if (!data) {
+        return null
+    }
+
+    return data;
 }
