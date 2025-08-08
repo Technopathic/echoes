@@ -10,17 +10,27 @@ import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-e
 import { Loader } from "@/components/ai-elements/loader";
 import { useGetHistory } from "@/hooks/useConversation";
 import { useSearchParams } from "next/navigation";
+import { useUserStore } from "@/hooks/useStore";
+import { createConversation } from "@/actions/conversationActions";
 
 const Chat = () => {
+	const session = useUserStore(state => state.session)
   const [input, setInput] = useState('')
-  const { messages, status } = useChat();
+  const { messages, sendMessage, status } = useChat()
 
 	const searchParams = useSearchParams()
 	const slug = searchParams.get('id');
   const { data } = useGetHistory(slug)
 
-  const storePrompt = () => {
-    
+  const storePrompt = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (input.trim() && session && slug) {
+
+			await createConversation(input, slug, session.access_token)
+			//sendMessage({ text: input })
+		}
+
+		setInput('')
   }
 
   return (

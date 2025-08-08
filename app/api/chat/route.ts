@@ -1,9 +1,11 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { openai } from '@ai-sdk/openai';
-import { generateObject, generateText } from 'ai';
+import { generateObject, generateText, streamText } from 'ai';
 import { z } from 'zod';
-import { showAuthUser, getAuth, showCharacter, showConversation, createConversation, createHistory, updateConversation, readHistory } from '../../db';
-import { calculateMood, calculateTrust, moodToText, trustToText } from '../../helper';
+import { showAuthUser, getAuth, showCharacter, showConversation, createConversation, createHistory, updateConversation, readHistory } from '../db';
+import { calculateMood, calculateTrust, moodToText, trustToText } from '../helper';
+
+export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
     const { input, slug  } = await request.json();
@@ -115,41 +117,35 @@ export async function POST(request: NextRequest) {
         Your Task: Based on all of this context, generate your next response. Stay in character. Do not break the fourth wall.
     `
 
-    const { text: aiResponse } = await generateText({
+    const result = streamText({
         model: openai(process.env.OPENAI_MODEL || 'gpt-4o-mini'),
         system: "You are an interactive character.",
         prompt: masterPrompt,
-    })
+        onFinish: async (aiResponse) => {
 
-    const summaryPrompt = `
-        Create a summary of this conversation based on the previous summary (if there is one) and the new conversation. 
+            const summaryPrompt = `
+                Create a summary of this conversation based on the previous summary (if there is one) and the new conversation. 
 
-        Previous summary: ${conversation.summary || 'No previous summary'}
-        New Conversation: {
-            User Input: ${_input}
-            Character Response: ${aiResponse}
+                Previous summary: ${conversation.summary || 'No previous summary'}
+                New Conversation: {
+                    User Input: ${_input}
+                    Character Response: ${aiResponse.text}
+                }
+                
+                Respond with only the summarized conversation.
+            `
+
+            const { text: summaryResponse } = await generateText({
+                model: openai(process.env.OPENAI_MODEL || 'gpt-4o-mini'),
+                prompt: summaryPrompt,
+            })
+
+             await Promise.all([
+                updateConversation(conversation.id, newMood, newTrust, summaryResponse),
+                createHistory(conversation.id, _input, aiResponse.text)
+            ])
         }
-        
-        Respond with only the summarized conversation.
-    `
-
-    const { text: summaryResponse } = await generateText({
-        model: openai(process.env.OPENAI_MODEL || 'gpt-4o-mini'),
-        prompt: summaryPrompt,
     })
 
-    await Promise.all([
-        updateConversation(conversation.id, newMood, newTrust, summaryResponse),
-        createHistory(conversation.id, _input, aiResponse)
-    ])
-    
-
-    const data = {
-        response: aiResponse
-    }
-
-    return NextResponse.json(
-        { type: 'SUCCESS', data },
-        { status: 200 }
-    );
+    return result.toUIMessageStreamResponse()
 }
