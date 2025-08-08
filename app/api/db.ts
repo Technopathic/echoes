@@ -60,7 +60,7 @@ export const showConversation = async (userId: number, characterId: number) => {
 }
 
 export const createConversation = async (userId: number, characterId: number) => {
-    const { data } = await supabase.from('echoes_conversations').insert({
+    const { data, error } = await supabase.from('echoes_conversations').insert({
         userId,
         characterId
     })
@@ -74,7 +74,8 @@ export const createConversation = async (userId: number, characterId: number) =>
         updated_at
     `)
     .single()
-
+    console.log(error);
+    
     if (!data) {
         return null
     }
