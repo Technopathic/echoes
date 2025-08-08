@@ -10,7 +10,7 @@ const Characters = () => {
       {data?.data?.map((character, i) => (
         <article className="h-42 rounded-lg shadow-md relative overflow-hidden" key={i}>
           <video className="w-full h-full object-cover">
-            <source src={`/characters/${character.slug}/cover.mp4`} />
+            <source src={`/characters/${character.slug}/cover.mp4`} type="video/mp4" />
           </video>
           <section className="absolute bottom-0 w-full px-2 py-1 bg-neutral-900/85 backdrop-blur-sm">
             <p className="text-neutral-100">{character.name}</p>

@@ -8,7 +8,6 @@ export const readCharacters = async () => {
     const { data } = await supabase.from('echoes_characters').select(`
         id,
         name,
-        image,
         slug
     `)
     .eq('archived', false)
@@ -24,7 +23,6 @@ export const showCharacter = async (slug: string) => {
     const { data } = await supabase.from('echoes_characters').select(`
         id,
         name,
-        image,
         slug
     `)
     .eq('archived', false)

@@ -7,6 +7,12 @@ import Login from "@/components/Login";
 
 const Home = () => {
   const session = useUserStore(state => state.session);
+  const hasHydrated = useUserStore(state => state._hasHydrated);
+
+  if (!hasHydrated) {
+    return null;
+  }
+
   return (
     <main className="flex w-full h-screen bg-neutral-900 gap-1">
       <section className="bg-neutral-900 h-screen w-72 flex flex-col">

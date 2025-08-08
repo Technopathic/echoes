@@ -43,8 +43,10 @@ export interface Session {
 export interface UserState {
     user: User | undefined
     session: Session | undefined
+    _hasHydrated: boolean
     setUser: (user: User | undefined) => void
     setSession: (sesson: Session | undefined) => void
+    setHasHydrated: (isHydrated: boolean) => void
 }
 
 export interface Character {
