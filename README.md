@@ -20,9 +20,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
     * fullName: string
     * archived: boolean
     * created_at: string
-* `echoes_userConversations`: User conversations and Character status based on user interactions
+* `echoes_conversations`: User conversations and Character status based on user interactions
     * id: number
-    * slug: string
     * userId: number
     * characterId: number
     * mood: number
@@ -32,8 +31,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 * `echoes_history`: Contains conversational history between User,Character, and relevance
     * id: number
     * conversationId: number
-    * userInput: string
-    * aiResponse: string
+    * input: string
+    * response: string
     * priority: number
     * created_at: string
 * `echoes_characters`: Contains characters and their designated prompts

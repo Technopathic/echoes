@@ -1,70 +1,24 @@
-'use client'
-
-import { PromptInput, PromptInputSubmit, PromptInputTextarea, PromptInputToolbar } from "@/components/ai-elements/prompt-input"
-import { useState } from "react"
-import { useChat } from '@ai-sdk/react';
-import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
-import { Message, MessageContent } from "@/components/ai-elements/message";
-import { Response } from '@/components/ai-elements/response';
-import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
-import { Loader } from "@/components/ai-elements/loader";
+import Characters from "@/components/Characters"
+import Chat from "@/components/Chat"
 
 const Home = () => {
-  const [input, setInput] = useState('')
-  const { messages, sendMessage, status } = useChat();
-
-  const storePrompt = () => {
-    return
-  }
-
   return (
-    <section className="w-full max-w-screen-sm mx-auto p-4 relative h-screen">
-      <section className="flex flex-col h-full w-full gap-4 justify-between">
-        <Conversation>
-          <ConversationContent>
-            {messages.map((message) => (
-              <Message from={message.role} key={message.id}>
-                <MessageContent>
-                  {message.parts.map((part, i) => {
-                    switch (part.type) {
-                      case 'text':
-                        return (
-                          <Response key={`${message.id}-${i}`}>
-                            {part.text}
-                          </Response>
-                        )
-                      case 'reasoning':
-                        return (
-                          <Reasoning
-                            key={`${message.id}-${i}`}
-                            className="w-full"
-                            isStreaming={status === 'streaming'}
-                          >
-                            <ReasoningTrigger />
-                            <ReasoningContent>{part.text}</ReasoningContent>
-                          </Reasoning>
-                        );
-                      default:
-                        return null
-                    }
-                  })}
-                </MessageContent>
-              </Message>
-            ))}
-            {status === 'submitted' && <Loader />}
-          </ConversationContent>
-          <ConversationScrollButton />
-        </Conversation>
-
-        <PromptInput onSubmit={storePrompt}>
-          <PromptInputTextarea onChange={(e) => setInput(e.target.value)} value={input} />
-          <PromptInputToolbar className="border-t">
-            <div />
-            <PromptInputSubmit disabled={!input} status={status} />
-          </PromptInputToolbar>
-        </PromptInput>
+    <main className="flex w-full h-screen bg-neutral-900 gap-1">
+      <section className="bg-neutral-900 h-screen w-72 flex flex-col">
+        <section className="py-4 flex flex-col items-center gap-2 px-2">
+          <h1 className="text-neutral-100 font-bold text-2xl">ECHOES</h1>
+          <div className="h-px bg-neutral-600 w-full" />
+        </section>
+        <Characters />
       </section>
-    </section>
+
+      <section className="flex-grow pr-3 py-3 flex flex-col">
+        <section></section>
+        <section className="bg-neutral-800 h-full rounded-xl">
+          <Chat />
+        </section>
+      </section>
+    </main>
   )
 }
 
