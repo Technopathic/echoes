@@ -2,21 +2,24 @@ import useSWR from 'swr'
 import * as types from '@/types'
 
 import { API_ROUTE } from '@/config/app'
+import { useUserStore } from './useStore'
 
 type GetHistoryResponse = types.DefaultResponse & { data?: types.History[] }
 
-export const useGetHistory= () => {
-    const response = async (key: string): Promise<GetHistoryResponse> => {
+export const useGetHistory = () => {
+    const response = async ([key, token]: [string, string | undefined]): Promise<GetHistoryResponse> => {
         const result = await fetch(`${API_ROUTE}/${key}`, {
             method: 'GET',
             headers: { 
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
     
         return await result.json();
     }
 
-    const swrKey = `characters/read`;
+    const session = useUserStore(state => state.session);
+    const swrKey = session ? [`characters/read`, session?.access_token] : null;
     return useSWR(swrKey, response);
 }

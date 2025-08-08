@@ -16,13 +16,13 @@ const Chat = () => {
   const { data } = useGetHistory()
 
   const storePrompt = () => {
-    return
+    
   }
 
   return (
     <section className="w-full max-w-screen-sm mx-auto p-4 relative h-full">
       <section className="flex flex-col h-full w-full gap-4 justify-between">
-        <Conversation>
+      	<Conversation>
           <ConversationContent>
             {messages.map((message) => (
               <Message from={message.role} key={message.id}>
