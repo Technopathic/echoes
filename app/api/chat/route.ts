@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
         system: "You are an interactive character.",
         prompt: masterPrompt,
         onFinish: async (aiResponse) => {
-
+            console.log({aiResponse})
             const summaryPrompt = `
                 Create a summary of this conversation based on the previous summary (if there is one) and the new conversation. 
 
@@ -138,6 +138,8 @@ export async function POST(request: NextRequest) {
             ])
         }
     })
+
+    console.log({result})
 
     return result.toUIMessageStreamResponse()
 }
