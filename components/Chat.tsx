@@ -10,11 +10,11 @@ import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-e
 import { Loader } from "@/components/ai-elements/loader";
 import { useGetHistory } from "@/hooks/useConversation";
 import { useSearchParams } from "next/navigation";
+import { runPreflight } from "@/actions/userActions";
 import { useUserStore } from "@/hooks/useStore";
-import { authPreflight } from "@/actions/userActions";
 
 const Chat = () => {
-	const session = useUserStore(state => state.session)
+  const session = useUserStore(state => state.session)
   const setSession = useUserStore(state => state.setSession)
   const [input, setInput] = useState('')
   const { messages, sendMessage, status } = useChat()
@@ -25,18 +25,14 @@ const Chat = () => {
 
   const storePrompt = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (input.trim() && session && slug) {
-      const preflight = await authPreflight(session.access_token, session.refresh_token)
-      if (preflight.type === 'SUCCESS') {
-        if (preflight.session) {
-          setSession(preflight.session)
-        }
-        
+		if (input.trim() && slug) {
+      const accessToken = await runPreflight(session, setSession)
+      if (accessToken) {
         sendMessage(
           { text: input },
           {
             body: { input, slug },
-            headers: { 'Authorization': `Bearer ${session.access_token}` }
+            headers: { 'Authorization': `Bearer ${accessToken}` }
           }
         )
       }

@@ -1,4 +1,5 @@
-import { API_ROUTE } from "@/config/app";
+import { API_ROUTE } from "@/config/app"
+import { Session } from "@/types";
 
 export const signIn = async (email: string, password: string) => {
     const emailValue = email.toLowerCase().trim();
@@ -26,4 +27,24 @@ export const authPreflight = async (accessToken: string, refreshToken: string) =
     })
 
     return await response.json()
+}
+
+export const runPreflight = async (
+    session: Session | undefined, 
+    setSession: (session: Session) => void
+) => {     
+    if (session) {
+        const preflight = await authPreflight(session.access_token, session.refresh_token)
+        if (preflight.type === 'SUCCESS') {
+            if (preflight.session) {
+                setSession(preflight.session)
+                
+                return preflight.access_token
+            }
+
+            return session.access_token
+        }
+    }
+
+    return null
 }
