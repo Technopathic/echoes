@@ -11,23 +11,35 @@ import { Loader } from "@/components/ai-elements/loader";
 import { useGetHistory } from "@/hooks/useConversation";
 import { useSearchParams } from "next/navigation";
 import { useUserStore } from "@/hooks/useStore";
-import { createConversation } from "@/actions/conversationActions";
+import { authPreflight } from "@/actions/userActions";
 
 const Chat = () => {
 	const session = useUserStore(state => state.session)
+  const setSession = useUserStore(state => state.setSession)
   const [input, setInput] = useState('')
   const { messages, sendMessage, status } = useChat()
 
 	const searchParams = useSearchParams()
-	const slug = searchParams.get('id');
+	const slug = searchParams.get('id')
   const { data } = useGetHistory(slug)
 
   const storePrompt = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (input.trim() && session && slug) {
-
-			await createConversation(input, slug, session.access_token)
-			//sendMessage({ text: input })
+      const preflight = await authPreflight(session.access_token, session.refresh_token)
+      if (preflight.type === 'SUCCESS') {
+        if (preflight.session) {
+          setSession(preflight.session)
+        }
+        
+        sendMessage(
+          { text: input },
+          {
+            body: { input, slug },
+            headers: { 'Authorization': `Bearer ${session.access_token}` }
+          }
+        )
+      }
 		}
 
 		setInput('')

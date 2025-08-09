@@ -13,15 +13,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Database Schema
 
-* `echoes_users`: Contains user information
-    * id: number
-    * username: string
-    * email: string
-    * archived: boolean
-    * created_at: string
 * `echoes_conversations`: User conversations and Character status based on user interactions
     * id: number
-    * userId: number
+    * userId: string
     * characterId: number
     * mood: number
     * trust: number

@@ -73,7 +73,6 @@ export const createConversation = async (userId: string, characterId: number) =>
         updated_at
     `)
     .single()
-    console.log(error);
 
     if (!data) {
         return null
@@ -136,4 +135,16 @@ export const getAuth = async (token: string) => {
     const { data: { user } } = await client.auth.getUser()
 
     return user
+}
+
+export const refreshSession = async (refreshToken: string) => {
+    const { data } = await supabase.auth.refreshSession({
+        refresh_token: refreshToken
+    });
+
+    if (!data) {
+        return null
+    }
+
+    return data.session
 }
