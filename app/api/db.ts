@@ -4,7 +4,8 @@ import { Database } from './database.types';
 const supabase = createClient<Database>(process.env.PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_KEY || '');
 
 export const readCharacters = async () => {
-    const { data } = await supabase.from('echoes_characters').select(`
+    const { data } = await supabase.from('echoes_characters')
+    .select(`
         id,
         name,
         slug
@@ -19,10 +20,11 @@ export const readCharacters = async () => {
 }
 
 export const showCharacter = async (slug: string) => {
-    const { data } = await supabase.from('echoes_characters').select(`
-        id,
-        name,
-        slug,
+    const { data } = await supabase.from('echoes_characters')
+    .select(`
+        id, 
+        name, 
+        slug, 
         prompt
     `)
     .eq('archived', false)
@@ -36,8 +38,27 @@ export const showCharacter = async (slug: string) => {
     return data
 }
 
+export const showCharacterPublic = async (slug: string) => {
+    const { data } = await supabase.from('echoes_characters')
+    .select(`
+        id, 
+        name, 
+        slug
+    `)
+    .eq('archived', false)
+    .eq('slug', slug)
+    .single()
+    
+    if (!data) {
+        return null
+    }
+
+    return data
+}
+
 export const showConversation = async (userId: string, characterId: number) => {
-    const { data } = await supabase.from('echoes_conversations').select(`
+    const { data } = await supabase.from('echoes_conversations')
+    .select(`
         id,
         userId,
         characterId,
@@ -59,7 +80,8 @@ export const showConversation = async (userId: string, characterId: number) => {
 }
 
 export const createConversation = async (userId: string, characterId: number) => {
-    const { data, error } = await supabase.from('echoes_conversations').insert({
+    const { data, error } = await supabase.from('echoes_conversations')
+    .insert({
         userId,
         characterId
     })
@@ -82,7 +104,8 @@ export const createConversation = async (userId: string, characterId: number) =>
 }
 
 export const updateConversation = async (conversationId: number, mood: number, trust: number, summary: string) => {
-    await supabase.from('echoes_conversations').update({
+    await supabase.from('echoes_conversations')
+    .update({
         mood,
         trust,
         summary
@@ -91,7 +114,8 @@ export const updateConversation = async (conversationId: number, mood: number, t
 }
 
 export const readHistory = async (conversationId: number, limit: number= 10) => {
-    const { data } = await supabase.from('echoes_history').select(`
+    const { data } = await supabase.from('echoes_history')
+    .select(`
         input,
         response
     `)
@@ -107,7 +131,8 @@ export const readHistory = async (conversationId: number, limit: number= 10) => 
 }
 
 export const createHistory = async (conversationId: number, input: string, response: string) => {
-    await supabase.from('echoes_history').insert({
+    await supabase.from('echoes_history')
+    .insert({
         conversationId,
         input,
         response

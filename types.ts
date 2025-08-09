@@ -43,13 +43,22 @@ export interface UserState {
 export interface Character {
     id: number
     name: string
-    prompt: string
     slug: string
 }
 
 export interface History {
     input: string
     response: string
+}
+
+export interface Conversation {
+    id: number
+    userId: string
+    characterId: number
+    mood: number
+    trust: number
+    summary: string
+    updated_at: string
 }
 
 export interface HistoryState {

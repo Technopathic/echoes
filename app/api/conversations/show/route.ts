@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { getAuth, readHistory, showCharacter, showConversation } from '../../db'
+import { getAuth, readHistory, showCharacterPublic, showConversation } from '../../db'
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
         )
     }
 
-    const character = await showCharacter(slug);
+    const character = await showCharacterPublic(slug);
     if (!character) {
         return NextResponse.json(
             { type: 'ERROR', error: 'Character not found' },
@@ -44,10 +44,10 @@ export async function GET(request: NextRequest) {
         )
     }
 
-    const history = await readHistory(conversation.id, 10);
+    const history = await readHistory(conversation.id, 50);
 
     return NextResponse.json(
-        { type: 'SUCCESS', data: history },
+        { type: 'SUCCESS', data: { history, character, conversation } },
         { status: 200 }
     )
 }
