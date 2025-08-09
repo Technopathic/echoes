@@ -82,16 +82,12 @@ export const createConversation = async (userId: string, characterId: number) =>
 }
 
 export const updateConversation = async (conversationId: number, mood: number, trust: number, summary: string) => {
-    const { error } = await supabase.from('echoes_conversations').update({
+    await supabase.from('echoes_conversations').update({
         mood,
         trust,
         summary
     })
-    .eq('conversationId', conversationId)
-
-    if (error) {
-        console.log(error);
-    }
+    .eq('id', conversationId)
 }
 
 export const readHistory = async (conversationId: number, limit: number= 10) => {
@@ -100,6 +96,7 @@ export const readHistory = async (conversationId: number, limit: number= 10) => 
         response
     `)
     .eq('conversationId', conversationId)
+    .order('created_at', { ascending: false })
     .limit(limit)
 
     if (!data) {

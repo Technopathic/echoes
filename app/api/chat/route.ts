@@ -94,7 +94,6 @@ export async function POST(request: NextRequest) {
 
     const history = await readHistory(conversation.id, 2); 
     const formattedHistory = history.map(h => `User: ${h.input}\nYou: ${h.response}`).join('\n\n');
-    console.log({history})
 
     const masterPrompt = `
         Your Persona: ${character.prompt}
@@ -115,7 +114,6 @@ export async function POST(request: NextRequest) {
         system: "You are an interactive character.",
         prompt: masterPrompt,
         onFinish: async (aiResponse) => {
-            console.log({aiResponse})
             const summaryPrompt = `
                 Create a summary of this conversation based on the previous summary (if there is one) and the new conversation. 
 
@@ -133,16 +131,12 @@ export async function POST(request: NextRequest) {
                 prompt: summaryPrompt,
             })
 
-            console.log(summaryResponse)
-
-             await Promise.all([
+            await Promise.all([
                 updateConversation(conversation.id, newMood, newTrust, summaryResponse),
                 createHistory(conversation.id, _input, aiResponse.text)
             ])
         }
     })
-
-    console.log({result})
 
     return result.toUIMessageStreamResponse()
 }
