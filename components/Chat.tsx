@@ -8,7 +8,6 @@ import { Message, MessageContent } from "@/components/ai-elements/message";
 import { Response } from '@/components/ai-elements/response';
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
-import { useShowConversation } from "@/hooks/useConversation";
 import { useSearchParams } from "next/navigation";
 import { runPreflight } from "@/actions/userActions";
 import { useUserStore } from "@/hooks/useStore";
@@ -21,7 +20,6 @@ const Chat = () => {
 
 	const searchParams = useSearchParams()
 	const slug = searchParams.get('id')
-  const { data } = useShowConversation(slug)
 
   const storePrompt = async (e: React.FormEvent) => {
 		e.preventDefault();

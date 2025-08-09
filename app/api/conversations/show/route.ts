@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     const conversation = await showConversation(auth.id, character.id);
     if (!conversation) {
         return NextResponse.json(
-            { type: 'SUCCESS', data: [] },
+            { type: 'SUCCESS', data: { history: [], character, conversation: null } },
             { status: 200 }
         )
     }
