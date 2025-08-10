@@ -46,7 +46,6 @@ export async function GET(request: NextRequest) {
     }
 
     const history = await showLatestHistory(conversation.id);
-    console.log(history);
      
     if (!history || history.response === null) {
          return NextResponse.json(

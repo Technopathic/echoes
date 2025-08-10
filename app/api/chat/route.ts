@@ -130,9 +130,11 @@ export async function POST(request: NextRequest) {
                 model: openai(process.env.OPENAI_MODEL || 'gpt-4o-mini'),
                 prompt: summaryPrompt,
             })
+            
+            const updatedAt = new Date().toISOString();
 
             await Promise.all([
-                updateConversation(conversation.id, newMood, newTrust, summaryResponse),
+                updateConversation(conversation.id, newMood, newTrust, summaryResponse, updatedAt),
                 createHistory(conversation.id, _input, aiResponse.text)
             ])
         }

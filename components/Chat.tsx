@@ -1,12 +1,11 @@
 'use client'
 
 import { PromptInput, PromptInputSubmit, PromptInputTextarea, PromptInputToolbar } from "@/components/ai-elements/prompt-input"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useChat } from '@ai-sdk/react';
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
 import { Response } from '@/components/ai-elements/response';
-import { Reasoning, ReasoningContent, ReasoningTrigger } from "@/components/ai-elements/reasoning";
 import { Loader } from "@/components/ai-elements/loader";
 import { useSearchParams } from "next/navigation";
 import { runPreflight } from "@/actions/userActions";
@@ -22,78 +21,17 @@ const Chat = () => {
   const [input, setInput] = useState('')
   const audioRef = useRef<HTMLAudioElement>(null);
   const { messages, sendMessage, status } = useChat({
-    onFinish: async (data) => {
-      console.log(data);
-      if (slug && session) {
+    onFinish: async () => {
+      if (slug && session && audioRef.current) {
+        audioRef.current.pause()
         const response = await getAudio(slug, session.access_token)
         const audioUrl = URL.createObjectURL(response);
 
-        // 3. Set the src and play
-        if (audioRef.current) {
-          audioRef.current.src = audioUrl;
-          audioRef.current.play();
-        }
-        console.log(response);
+        audioRef.current.src = audioUrl
+        audioRef.current.play()
       }
     }
   })
-
-  const audioTriggeredForStream = useRef(false);
-
-  useEffect(() => {
-    const fetchAndPlayAudio = async () => {
-      if (slug && session) {
-
-        
-        //console.log(response);
-       // await stream(response.audioStream);
-        //await stream(Readable.from(response.audio));
-
-        /*const mediaSource = new MediaSource();
-        audioPlayerRef.current.src = URL.createObjectURL(mediaSource);
-        
-        mediaSource.addEventListener('sourceopen', () => {
-          const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
-          const reader = response.body!.getReader();
-
-          const pump = async () => {
-            const { done, value } = await reader.read();
-            
-            if (done) {
-              if (!sourceBuffer.updating) {
-                mediaSource.endOfStream();
-              } else {
-                sourceBuffer.addEventListener('updateend', () => mediaSource.endOfStream(), { once: true });
-              }
-              return;
-            }
-
-            const appendBuffer = (chunk: BufferSource) => {
-                return new Promise((resolve) => {
-                    if (sourceBuffer.updating) {
-                        sourceBuffer.addEventListener('updateend', () => {
-                            sourceBuffer.appendBuffer(chunk);
-                            resolve();
-                        }, { once: true });
-                    } else {
-                        sourceBuffer.appendBuffer(chunk);
-                        resolve();
-                    }
-                });
-            };
-            
-            await appendBuffer(value);
-            pump(); // Continue to the next chunk
-          };
-          
-          pump();
-        }, { once: true });
-
-        audioPlayerRef.current.play().catch(console.error)*/
-      }
-    };
-    fetchAndPlayAudio()
-  }, [status, slug])
 
   const storePrompt = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -129,17 +67,6 @@ const Chat = () => {
                             {part.text}
                           </Response>
                         )
-                      case 'reasoning':
-                        return (
-                          <Reasoning
-                            key={`${message.id}-${i}`}
-                            className="w-full"
-                            isStreaming={status === 'streaming'}
-                          >
-                            <ReasoningTrigger />
-                            <ReasoningContent>{part.text}</ReasoningContent>
-                          </Reasoning>
-                        );
                       default:
                         return null
                     }

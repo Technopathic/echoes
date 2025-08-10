@@ -11,6 +11,7 @@ export const readCharacters = async () => {
         slug
     `)
     .eq('archived', false)
+    .order('updated_at', { ascending: false })
     
     if (!data) {
         return []
@@ -103,12 +104,13 @@ export const createConversation = async (userId: string, characterId: number) =>
     return data
 }
 
-export const updateConversation = async (conversationId: number, mood: number, trust: number, summary: string) => {
+export const updateConversation = async (conversationId: number, mood: number, trust: number, summary: string, updated_at: string) => {
     await supabase.from('echoes_conversations')
     .update({
         mood,
         trust,
-        summary
+        summary,
+        updated_at
     })
     .eq('id', conversationId)
 }

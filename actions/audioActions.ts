@@ -7,8 +7,6 @@ export const getAudio = async (slug: string, accessToken: string) => {
             'Authorization': `Bearer ${accessToken}`
         }
     })
-    console.log(response)
 
     return await response.blob()
-    //return await response.json()
 }

@@ -31,20 +31,3 @@ export const useShowConversation = (slug: string | null) => {
     const swrKey = session && slug ? [`conversations/show?slug=${slug}`] : null;
     return useSWR(swrKey, response);
 }
-
-export const useGetAudio = (slug: string) => {
-    const response = async ([key, token]: [string, string | null]) => {
-        const result = await fetch(`${API_ROUTE}/${key}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-    
-        return result;
-    }
-
-    const session = useUserStore(state => state.session);
-    const swrKey = session ? [`audio`, session.access_token] : null
-    return useSWR(swrKey, response);
-}
