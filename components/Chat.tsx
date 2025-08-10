@@ -26,14 +26,13 @@ const Chat = () => {
       console.log(data);
       if (slug && session) {
         const response = await getAudio(slug, session.access_token)
-        const reader = new FileReader();
-        reader.readAsDataURL(response);
-        reader.onload = () => {
-          if (audioRef.current) {
-            audioRef.current.src = reader.result as string;
-            audioRef.current.play();
-          }
-        };
+        const audioUrl = URL.createObjectURL(response);
+
+        // 3. Set the src and play
+        if (audioRef.current) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.play();
+        }
         console.log(response);
       }
     }

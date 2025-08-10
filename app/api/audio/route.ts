@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     if (!slug) {
         return NextResponse.json(
             { type: 'GENERAL', error: 'Missing Slug.' },
-            { status: 401 }
+            { status: 401, statusText: 'Missing Slug' }
         )
     }
 
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     if (!authHeader) {
         return NextResponse.json(
             { type: 'AUTH', error: 'Missing authorization token' },
-            { status: 401 }
+            { status: 401, statusText: 'Missing authorization token' }
         )
     }
 
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     if (!history || history.response === null) {
          return NextResponse.json(
             { type: 'ERROR', error: 'No history data' },
-            { status: 401 }
+            { status: 401, statusText: 'No history data' }
         )
     }
 
