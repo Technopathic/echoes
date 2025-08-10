@@ -11,7 +11,6 @@ export const readCharacters = async () => {
         slug
     `)
     .eq('archived', false)
-    .order('updated_at', { ascending: false })
     
     if (!data) {
         return []
@@ -52,6 +51,29 @@ export const showCharacterPublic = async (slug: string) => {
     
     if (!data) {
         return null
+    }
+
+    return data
+}
+
+export const readConversations = async (userId: string) => {
+    const { data } = await supabase.from('echoes_conversations')
+    .select(`
+        id,
+        userId,
+        characterId,
+        mood,
+        trust,
+        summary,
+        updated_at
+    `)
+    .eq('archived', false)
+    .eq('userId', userId)
+    .order('updated_at', { ascending: false })
+
+
+    if (!data) {
+        return []
     }
 
     return data

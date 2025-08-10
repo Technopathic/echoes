@@ -57,7 +57,7 @@ export interface Conversation {
     characterId: number
     mood: number
     trust: number
-    summary: string
+    summary: string | null
     updated_at: string
 }
 

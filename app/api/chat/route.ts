@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    const authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get('authorization')
     if (!authHeader) {
         return NextResponse.json(
             { type: 'AUTH', error: 'Missing authorization token' },
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    const auth = await getAuth(authHeader);
+    const auth = await getAuth(authHeader)
     if (!auth) {
         return NextResponse.json(
             { type: 'AUTH', error: 'Authenticated User not found' },
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    const character = await showCharacter(slug);
+    const character = await showCharacter(slug)
     if (!character) {
         return NextResponse.json(
             { type: 'ERROR', error: 'Character not found' },
@@ -50,9 +50,9 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    let conversation = await showConversation(auth.id, character.id);
+    let conversation = await showConversation(auth.id, character.id)
     if (!conversation) {
-        conversation = await createConversation(auth.id, character.id);
+        conversation = await createConversation(auth.id, character.id)
         if (!conversation) {
             return NextResponse.json(
                 { type: 'ERROR', error: 'Unable to start conversation' },

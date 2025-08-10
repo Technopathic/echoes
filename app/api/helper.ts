@@ -1,3 +1,5 @@
+import { Character, Conversation } from "@/types";
+
 const MIN_STATE = 0;
 const MAX_STATE = 10;
 
@@ -24,3 +26,33 @@ export const trustToText = (trust: number) => {
 
     if (trust >= 7) { return 'trusting' }
 }
+
+export const sortCharactersByConversationOrder = ( characters: Character[], conversations: Conversation[]): Character[] => {
+    const orderMap = new Map<number, number>();
+    conversations.forEach((convo, index) => {
+        orderMap.set(convo.characterId, index)
+    })
+
+    const sortedCharacters = [...characters].sort((a, b) => {
+        const indexA = orderMap.get(a.id)
+        const indexB = orderMap.get(b.id)
+
+        const aIsInOrder = indexA !== undefined
+        const bIsInOrder = indexB !== undefined
+
+        if (aIsInOrder && bIsInOrder) { 
+            return indexA - indexB 
+        } 
+        else if (aIsInOrder) { 
+            return -1 
+        } 
+        else if (bIsInOrder) { 
+            return 1 
+        } 
+        else { 
+            return 0 
+        }
+    })
+
+    return sortedCharacters
+};
