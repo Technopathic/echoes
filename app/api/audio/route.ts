@@ -45,7 +45,9 @@ export async function GET(request: NextRequest) {
         )
     }
 
-    const history = await showLatestHistory(conversation.id); 
+    const history = await showLatestHistory(conversation.id);
+    console.log(history);
+     
     if (!history || history.response === null) {
          return NextResponse.json(
             { type: 'ERROR', error: 'No history data' },
@@ -53,19 +55,20 @@ export async function GET(request: NextRequest) {
         )
     }
 
-    console.log(history)
-    
-    const elevenlabs = new ElevenLabsClient();
+    const elevenlabs = new ElevenLabsClient({
+        apiKey: process.env.ELEVENLABS_API_KEY
+    });
 
     const audio = await elevenlabs.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
         text: history.response,
-        modelId: 'eleven_multilingual_v2',
+        modelId: 'eleven_turbo_v2_5', 
         outputFormat: 'mp3_44100_128'
     });
 
     return new Response(audio, {
         headers: {
             'Content-Type': 'audio/mpeg',
+            'Cache-Control': 'no-store'
         },
     });
 
