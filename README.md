@@ -56,7 +56,7 @@ Echoes is an interactive conversational AI application that allows users to enga
 
 *   `GET /auth/preflight`: The endpoint for authenticating and refreshing JWTs
     *   **Authentication:** Requires a bearer token in the `Authorization` header.
-     *   **Request Body:**
+    *   **Request Body:**
         ```json
         {
           "refreshToken": "The User's session refresh token.",
@@ -78,11 +78,11 @@ Echoes is an interactive conversational AI application that allows users to enga
         3.  Retrieves a JSON object containing information on the current conversation, including the summary.
 
 *   `POST /users/signIn`: The endpoint for creating a user session.
-        **Request Body:**
+    *   **Request Body:**
         ```json
         {
-          "email": "The user's email",
-          "password": "The user's password"
+            "email": "The user's email",
+            "password": "The user's password"
         }
         ```
     *   **Functionality:**
