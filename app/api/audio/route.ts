@@ -3,7 +3,15 @@ import { getAuth, showCharacter, showConversation, showLatestHistory } from '../
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 export async function GET(request: NextRequest) {
-    const { slug } = await request.json();
+    const searchParams = request.nextUrl.searchParams
+    const slug = searchParams.get('slug')
+
+    if (!slug) {
+        return NextResponse.json(
+            { type: 'GENERAL', error: 'Missing Slug.' },
+            { status: 401 }
+        )
+    }
 
     const authHeader = request.headers.get('authorization');
     if (!authHeader) {

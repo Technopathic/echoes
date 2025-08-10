@@ -9,6 +9,6 @@ export const getAudio = async (slug: string, accessToken: string) => {
     })
     console.log(response)
 
-    return response.blob()
+    return await response.blob()
     //return await response.json()
 }

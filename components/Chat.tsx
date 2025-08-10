@@ -12,7 +12,6 @@ import { useSearchParams } from "next/navigation";
 import { runPreflight } from "@/actions/userActions";
 import { useUserStore } from "@/hooks/useStore";
 import { getAudio } from "@/actions/audioActions";
-import { ElevenLabsClient, stream } from '@elevenlabs/elevenlabs-js';
 
 const Chat = () => {
   const session = useUserStore(state => state.session)
