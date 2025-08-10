@@ -53,6 +53,8 @@ export async function GET(request: NextRequest) {
         )
     }
 
+    console.log(history)
+    
     const elevenlabs = new ElevenLabsClient();
 
     const audio = await elevenlabs.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
