@@ -10,7 +10,7 @@ export const appConfig: types.appConfig = {
 	keywords: ['games', 'characters', 'ai', 'agent', 'growth', 'sales', 'development', 'design', 'research'],
 	creator: 'Ren',
 	appType: 'website',
-	ogImage: 'https://localhost:300/ogimage.png',
+	ogImage: 'https://echoes-ecru.vercel.app/ogimage.png',
 	description: "Conversational Character bots from popular games and media.",
-	siteURL: 'https://locallhost:3000'
+	siteURL: 'https://echoes-ecru.vercel.app'
 }
