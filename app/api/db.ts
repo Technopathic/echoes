@@ -138,6 +138,7 @@ export const showLatestHistory = async (conversationId: number) => {
     `)
     .eq('conversationId', conversationId)
     .order('created_at', { ascending: false })
+    .limit(1)
     .single()
 
     if (!data) {
