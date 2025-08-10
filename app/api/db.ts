@@ -130,6 +130,23 @@ export const readHistory = async (conversationId: number, limit: number= 10) => 
     return data
 }
 
+export const showLatestHistory = async (conversationId: number) => {
+    const { data } = await supabase.from('echoes_history')
+    .select(`
+        input,
+        response
+    `)
+    .eq('conversationId', conversationId)
+    .order('created_at', { ascending: false })
+    .single()
+
+    if (!data) {
+        return null
+    }
+
+    return data
+}
+
 export const createHistory = async (conversationId: number, input: string, response: string) => {
     await supabase.from('echoes_history')
     .insert({

@@ -1,7 +1,7 @@
 'use client'
 
 import { PromptInput, PromptInputSubmit, PromptInputTextarea, PromptInputToolbar } from "@/components/ai-elements/prompt-input"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useChat } from '@ai-sdk/react';
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
@@ -11,6 +11,8 @@ import { Loader } from "@/components/ai-elements/loader";
 import { useSearchParams } from "next/navigation";
 import { runPreflight } from "@/actions/userActions";
 import { useUserStore } from "@/hooks/useStore";
+import { getAudio } from "@/actions/audioActions";
+import {  stream } from '@elevenlabs/elevenlabs-js';
 
 const Chat = () => {
   const session = useUserStore(state => state.session)
@@ -21,8 +23,66 @@ const Chat = () => {
 	const searchParams = useSearchParams()
 	const slug = searchParams.get('id')
 
+  const audioPlayerRef = useRef<HTMLAudioElement>(null);
+  const audioTriggeredForStream = useRef(false);
+
+  useEffect(() => {
+    const fetchAndPlayAudio = async () => {
+      if (slug && session) {
+
+        const response = await getAudio(slug, session.access_token)
+        //console.log(response);
+       // await stream(response.audioStream);
+        //await stream(Readable.from(response.audio));
+
+        /*const mediaSource = new MediaSource();
+        audioPlayerRef.current.src = URL.createObjectURL(mediaSource);
+        
+        mediaSource.addEventListener('sourceopen', () => {
+          const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
+          const reader = response.body!.getReader();
+
+          const pump = async () => {
+            const { done, value } = await reader.read();
+            
+            if (done) {
+              if (!sourceBuffer.updating) {
+                mediaSource.endOfStream();
+              } else {
+                sourceBuffer.addEventListener('updateend', () => mediaSource.endOfStream(), { once: true });
+              }
+              return;
+            }
+
+            const appendBuffer = (chunk: BufferSource) => {
+                return new Promise((resolve) => {
+                    if (sourceBuffer.updating) {
+                        sourceBuffer.addEventListener('updateend', () => {
+                            sourceBuffer.appendBuffer(chunk);
+                            resolve();
+                        }, { once: true });
+                    } else {
+                        sourceBuffer.appendBuffer(chunk);
+                        resolve();
+                    }
+                });
+            };
+            
+            await appendBuffer(value);
+            pump(); // Continue to the next chunk
+          };
+          
+          pump();
+        }, { once: true });
+
+        audioPlayerRef.current.play().catch(console.error)*/
+      }
+    };
+    fetchAndPlayAudio()
+  }, [status, slug])
+
   const storePrompt = async (e: React.FormEvent) => {
-		e.preventDefault();
+		e.preventDefault()
 		if (input.trim() && slug) {
       const accessToken = await runPreflight(session, setSession)
       if (accessToken) {
@@ -30,7 +90,7 @@ const Chat = () => {
           { text: input },
           {
             body: { input, slug },
-            headers: { 'Authorization': `Bearer ${accessToken}` }
+            headers: { 'Authorization': `Bearer ${accessToken}` },
           }
         )
       }

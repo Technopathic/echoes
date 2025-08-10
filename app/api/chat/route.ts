@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     const convertMood = moodToText(newMood)
     const convertTrust = trustToText(newTrust)
 
-    const history = await readHistory(conversation.id, 2); 
+    const history = await readHistory(conversation.id, 5); 
     const formattedHistory = history.map(h => `User: ${h.input}\nYou: ${h.response}`).join('\n\n');
 
     const masterPrompt = `
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
                 createHistory(conversation.id, _input, aiResponse.text)
             ])
         }
-    })
+    }) 
 
     return result.toUIMessageStreamResponse()
 }
