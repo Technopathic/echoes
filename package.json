@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev-desktop": "cross-env BUILD_ENVIRONMENT=export tauri dev"
+    "dev-desktop": "cross-env BUILD_ENVIRONMENT=export tauri dev",
+    "export": "cross-env BUILD_ENVIRONMENT=export next build"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.5",
     "@ai-sdk/react": "^2.0.8",
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/ios": "^7.4.2",
     "@elevenlabs/elevenlabs-js": "^2.8.0",
     "@icons-pack/react-simple-icons": "^13.7.0",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -47,6 +50,7 @@
     "zustand": "^5.0.7"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.4.2",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@tauri-apps/cli": "^1.6.3",
