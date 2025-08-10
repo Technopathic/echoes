@@ -20,12 +20,12 @@ Echoes is an interactive conversational AI application that allows users to enga
 
 *   **Frontend:**
     *   [Next.js](https://nextjs.org/): A React framework for building server-side rendered and static web applications.
-    *   [React](https://react.dev/): A JavaScript library for building user interfaces.
     *   [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for rapid UI development.
     *   [Tauri](https://tauri.app/): A toolkit for building cross-platform desktop apps with a web frontend.
 *   **Backend:**
     *   [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers): Serverless functions for handling API requests.
     *   [OpenAI API](https://openai.com/): Used for generating character responses and analyzing user input.
+     *   [ElevenLabs API](https://elevenlabs.io/developers): Used for generating text-to-speech conversational output.
     *   [Vercel AI SDK](https://sdk.vercel.ai/): A library for building AI-powered applications with React and Next.js.
 *   **Database:**
     *   [Supabase](https://supabase.com/): An open-source Firebase alternative for database management, authentication, and more.
@@ -54,6 +54,40 @@ Echoes is an interactive conversational AI application that allows users to enga
         1.  Authenticates the user and retrieves the character and conversation data.
         2.  Uses an AI model to generate the audio for the most recent response.
 
+*   `GET /auth/preflight`: The endpoint for authenticating and refreshing JWTs
+    *   **Authentication:** Requires a bearer token in the `Authorization` header.
+     *   **Request Body:**
+        ```json
+        {
+          "refreshToken": "The User's session refresh token.",
+        }
+        ```
+    *   **Functionality:**
+        1.  Authenticates the user and retrieves a new token if necessary
+
+*   `GET /characters/read`: The endpoint for retrieving an array of characters ordered by user's recent conversations
+    *   **Authentication:** Requires a bearer token in the `Authorization` header.
+    *   **Functionality:**
+        1.  Retrieves a JSON object array of characters sorted by user's recent conversations
+
+*   `GET /conversations/show`: The endpoint for retrieving an object of conversation history, summary, and character information.
+    *   **Authentication:** Requires a bearer token in the `Authorization` header.
+    *   **Functionality:**
+        1.  Retrieves a JSON object array of recent conversation history.
+        2.  Retrieves a JSON object containing the current conversation character information.
+        3.  Retrieves a JSON object containing information on the current conversation, including the summary.
+
+*   `POST /users/signIn`: The endpoint for creating a user session.
+        **Request Body:**
+        ```json
+        {
+          "email": "The user's email",
+          "password": "The user's password"
+        }
+        ```
+    *   **Functionality:**
+        1.  Authenticates the user and creates a new User Session.
+
 ## Getting Started
 
 First, run the development server:
@@ -70,23 +104,21 @@ The application can be deployed as a web application or built as a desktop appli
 
 ### Web Application
 
-1.  Set up a new project on a platform like [Vercel](https://vercel.com/) or [Netlify](https://www.netlify.com/).
-2.  Configure the following environment variables:
+1.  Set up a new project on a platform on [Vercel](https://vercel.com/)
+2.  Configure the following environment variables in Vercel's Dashboard
     *   `PUBLIC_SUPABASE_URL`: Your Supabase project URL.
     *   `SUPABASE_KEY`: Your Supabase service role key.
     *   `OPENAI_MODEL`: The OpenAI model to use (e.g., `gpt-4o-mini`).
     *   `OPENAI_API_KEY`: Your OpenAI API key.
-3.  Push your code to your Git repository to trigger a deployment.
+    *   `ELEVENLABS_API_KEY`: Your Elevenlabs API key.
+3. Push to GitHub main branch and the automatated CI/CD will deploy to production.
 
 ### Desktop Application
 
-1.  Make sure you have the [Tauri development prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) installed.
-2.  Run the following command to build the application:
+1.  Run the following command to build the application:
     ```bash
-    pnpm build
-    pnpm tauri build
+    pnpm dev-desktop
     ```
-3.  The distributable files will be located in the `src-tauri/target/release/bundle` directory.
 
 ## Database Schema
 
