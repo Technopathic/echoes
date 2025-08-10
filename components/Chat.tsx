@@ -12,25 +12,41 @@ import { useSearchParams } from "next/navigation";
 import { runPreflight } from "@/actions/userActions";
 import { useUserStore } from "@/hooks/useStore";
 import { getAudio } from "@/actions/audioActions";
-import {  stream } from '@elevenlabs/elevenlabs-js';
+import { ElevenLabsClient, stream } from '@elevenlabs/elevenlabs-js';
 
 const Chat = () => {
   const session = useUserStore(state => state.session)
   const setSession = useUserStore(state => state.setSession)
-  const [input, setInput] = useState('')
-  const { messages, sendMessage, status } = useChat()
-
-	const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
 	const slug = searchParams.get('id')
 
-  const audioPlayerRef = useRef<HTMLAudioElement>(null);
+  const [input, setInput] = useState('')
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const { messages, sendMessage, status } = useChat({
+    onFinish: async (data) => {
+      console.log(data);
+      if (slug && session) {
+        const response = await getAudio(slug, session.access_token)
+        const reader = new FileReader();
+        reader.readAsDataURL(response);
+        reader.onload = () => {
+          if (audioRef.current) {
+            audioRef.current.src = reader.result as string;
+            audioRef.current.play();
+          }
+        };
+        console.log(response);
+      }
+    }
+  })
+
   const audioTriggeredForStream = useRef(false);
 
   useEffect(() => {
     const fetchAndPlayAudio = async () => {
       if (slug && session) {
 
-        const response = await getAudio(slug, session.access_token)
+        
         //console.log(response);
        // await stream(response.audioStream);
         //await stream(Readable.from(response.audio));
@@ -145,6 +161,7 @@ const Chat = () => {
             <PromptInputSubmit disabled={!input} status={status} />
           </PromptInputToolbar>
         </PromptInput>
+        <audio ref={audioRef} />
       </section>
     </section>
   )
