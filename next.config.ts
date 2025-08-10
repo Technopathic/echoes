@@ -7,6 +7,8 @@ const env = {
 }
 
 const nextConfig: NextConfig = {
+  output: process.env.BUILD_ENVIRONMENT as 'export' || undefined,
+  reactStrictMode: false,
   env,
   async headers() {
     return [{

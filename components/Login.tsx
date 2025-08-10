@@ -5,12 +5,13 @@ import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
 
 import { signIn } from "@/actions/userActions";
-import { useUserStore } from '@/hooks/useStore'
+import { useUIStore, useUserStore } from '@/hooks/useStore'
 
 import * as types from '@/types';
 
 const Login = () => {
     const setSession = useUserStore(state => state.setSession);
+    const setIsLoading = useUIStore(state => state.setIsLoading);
     const router = useRouter();
 
     const emailInputRef = useRef<HTMLInputElement>(null);
@@ -22,11 +23,13 @@ const Login = () => {
 
     const handleSignIn = async () => {
         if (emailInputRef.current && passwordInputRef.current) {
+            setIsLoading(true)
             const response = await signIn(
                 emailInputRef.current.value, 
                 passwordInputRef.current.value
             );
 
+            setIsLoading(false)
             handleResponse(response);
         }
     }
@@ -42,6 +45,7 @@ const Login = () => {
                 break;
 
             case 'GENERAL':
+            case 'AUTH':
                 setGeneralError({ errorState: true, errorDescription: response.error });
                 break;
 

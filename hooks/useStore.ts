@@ -20,6 +20,8 @@ export const useUserStore = create<types.UserState>()(persist(immer(set => ({
     },
 }))
 
-export const useHistoryStore = create<types.HistoryState>()(immer(set => ({
-    history: []
+
+export const useUIStore = create<types.UIState>()(immer(set => ({
+    isLoading: false,
+    setIsLoading: (isLoading: boolean) => set({ isLoading })
 })))

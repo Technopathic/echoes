@@ -1,10 +1,21 @@
 'use client'
 
 import { useGetCharacters } from '@/hooks/useCharacter'
+import { useUIStore } from '@/hooks/useStore'
 import Link from 'next/link'
+import { useEffect } from 'react'
 
 const Characters = () => {
-  const { data } = useGetCharacters()
+  const setIsLoading = useUIStore(state => state.setIsLoading)
+  const { data, isLoading } = useGetCharacters()
+
+  useEffect(() => {
+    setIsLoading(isLoading)
+  }, [isLoading, setIsLoading])
+
+  if (isLoading) {
+    return null
+  }
 
   return (
     <section className="flex flex-col gap-4 w-full">

@@ -17,7 +17,7 @@ export type DefaultResponse = {
 
 export type InputError = { errorState: boolean, errorDescription: string | undefined }
 
-type ResponseType = 'EMAIL' | 'PASSWORD' | 'GENERAL' | 'SUCCESS'
+type ResponseType = 'EMAIL' | 'PASSWORD' | 'GENERAL' | 'SUCCESS' | 'AUTH'
 
 export interface AuthResponse {
     type: ResponseType
@@ -61,6 +61,7 @@ export interface Conversation {
     updated_at: string
 }
 
-export interface HistoryState {
-    history: History[]
+export interface UIState {
+    isLoading: boolean
+    setIsLoading: (isLoading: boolean) => void;
 }

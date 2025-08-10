@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Chat from "@/components/Chat"
-import { useUserStore } from "@/hooks/useStore";
+import { useUIStore, useUserStore } from "@/hooks/useStore";
 import { Suspense, useEffect, useState } from "react";
 import Link from "@/components/common/Link";
 import { LuArrowLeft, LuHistory, LuX } from "react-icons/lu";
@@ -13,12 +13,18 @@ import Button from "@/components/common/Button";
 const Conversation = () => {
     const session = useUserStore(state => state.session)
     const hasHydrated = useUserStore(state => state._hasHydrated)
+    const setIsLoading = useUIStore(state => state.setIsLoading)
+
     const router = useRouter()
     const [showHistory, setShowHistory] = useState(false)
 
     const searchParams = useSearchParams()
     const slug = searchParams.get('id')
-    const { data } = useShowConversation(slug)
+    const { data, isLoading } = useShowConversation(slug)
+
+    useEffect(() => {
+        setIsLoading(isLoading)
+    }, [isLoading, setIsLoading])
 
     useEffect(() => {
         if (hasHydrated && !session) {
